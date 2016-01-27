@@ -7,31 +7,38 @@
 using namespace std;
 
 class AStarSearch {
-	int nodeExpanded;
+	int topMostLevel;
+	int nodesExpanded;
 	vector<Tree> listOfTrees;
 	vector<Node> originalTree;
 
 public:
 	AStarSearch(string);
 	void runSearch();
-	int getNodeExpanded();
+	int getNodesExpanded();
 };
 
 AStarSearch::AStarSearch(string filename) {
-	nodeExpanded = 0;
+	topMostLevel = 0;
+	
 	// intial tree
 	listOfTrees.push_back(Tree(filename));
 	originalTree = listOfTrees[0].getNodes();
+	nodesExpanded = originalTree.size()-1;
 }
 
-int AStarSearch::getNodeExpanded() {
-	return nodeExpanded;
+int AStarSearch::getNodesExpanded() {
+	return nodesExpanded;
 }
 
 void AStarSearch::runSearch() {
 	int pathSize = 0;
-	while (pathSize < 4) {
-		nodeExpanded++;
+	int size = originalTree.size();
+	while (pathSize < size) {
+		if (size == 1) {
+			break;
+		}
+		topMostLevel++;
 		int nodeToExpand;
 		int prevLevel;
 		double distanceToNextNode;
@@ -56,20 +63,35 @@ void AStarSearch::runSearch() {
 		vector<int> lastPath = listOfTrees[prevLevel].getPath();
 		pathSize = lastPath.size();
 		
-		Tree temp(nodeExpanded, nodeToExpand, distanceToNextNode, lastPath, originalTree);
+		Tree temp(topMostLevel, nodeToExpand, distanceToNextNode, lastPath, originalTree);
+		nodesExpanded += temp.getExpandedNodes();
 		listOfTrees.push_back(temp);
 	}
-	vector<int> finalPath = listOfTrees[nodeExpanded].getPath();
+	vector<int> finalPath = listOfTrees[topMostLevel].getPath();
 	// print out the data points in the order where the optimal solution travelled
 	pathSize = finalPath.size();
-	for (int i = 0; i < pathSize; ++i) {
-		originalTree[finalPath[i]].printNode();
-	}
 }
 
 int main() {
-	AStarSearch searchObj("./randTSP/4/instance_1.txt");
-	searchObj.runSearch();
-	cout << searchObj.getNodeExpanded() << endl;
+	int TSPSize;
+	int TSPInstance;
+	while(true) {
+		cout << "Enter the number of nodes you want for your TSP: ";
+		cin >> TSPSize;
+		if (TSPSize <= 0) {
+			cout << "Invalid TSP size; program will now terminate" << endl;
+			break;
+		}
+		cout << "Which instance of TSP do you want: ";
+		cin >> TSPInstance;
+		if (TSPInstance < 1 || TSPInstance > 10) {
+			cout << "Invalid TSP instance, please enter a number from 1 to 10" << endl;
+			break;
+		}
+		string fileLocation = "./randTSP/" + to_string(TSPSize) + "/instance_" + to_string(TSPInstance) +".txt";
+		AStarSearch searchObj(fileLocation);
+		searchObj.runSearch();
+		cout << searchObj.getNodesExpanded() << endl;
+	}
 	return 0;
 }

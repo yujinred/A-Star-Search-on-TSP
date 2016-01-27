@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -g -Wall -MMD
-OBJECTS = TravellingSalesmen.o Node.o Tree.o
+OBJECTS = TravellingSalesmen.o Node.o Tree.o Heuristics.o
 DEPENDS = ${OBJECTS:.o=.d}
 EXEC = a.out
 

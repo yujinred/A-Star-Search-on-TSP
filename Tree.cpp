@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <float.h>
+#include "heuristics.h"
 using namespace std;
 
 // generate the location name, x coordinations, and y coordinations
@@ -31,6 +32,7 @@ Tree::Tree(string fileLocation) {
 }
 
 Tree::Tree(int level, int currentNode, double initialDistance, vector<int> path, vector<Node> listOfNodes) {
+	expandedNodes = 0;
 	this->level = level;
 	this->currentNode = currentNode;
 	this->initialDistance = initialDistance;
@@ -73,15 +75,29 @@ int Tree::getCurrentNode() { return currentNode; }
 vector<double> Tree::getAdjustedDistance() { return adjustedDistance; }
 vector<int> Tree::getPath() { return path; }
 vector<Node> Tree::getNodes() { return listOfNodes; }
+int Tree::getExpandedNodes() { return expandedNodes; }
 
+
+double Tree::generateHeuristics() {
+	vector<Node> truncatedNodeList;
+	for (int i = 0; i < listOfNodes.size(); ++i) {
+		if (!isInPath(i)) {
+			truncatedNodeList.push_back(listOfNodes[i]);
+		}
+	}
+	HeuristicsGenerator h(truncatedNodeList);
+	return h.getHeuristics();
+}
 
 void Tree::updateDistance() {
 
 	for (int i = 0; i < size; ++i) {
 		if (!isInPath(i) || (loopBack && i == 0)) {
 			// our cost so far plus the extra distance to get to the new node
+			expandedNodes++;
 			double newDistance = initialDistance + listOfNodes[currentNode].distanceToNode(listOfNodes[i]);
-			adjustedDistance.push_back(newDistance);		
+			double heuristics = generateHeuristics();
+			adjustedDistance.push_back(newDistance + heuristics);		
 		} else {
 			adjustedDistance.push_back(0);
 		}

@@ -5,5 +5,5 @@ To run this program:
 ```
 * Clone this project into your local repository
 * pull
-* simple run the 'make' command
+* simply run the 'make' command
 ```

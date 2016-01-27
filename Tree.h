@@ -10,6 +10,7 @@ class Tree {
 	int currentNode;
 	bool loopBack;
 	double initialDistance;
+	int expandedNodes;
 	std::vector<double> adjustedDistance;
 	std::vector<int> path;
 	std::vector<Node> listOfNodes;
@@ -22,6 +23,7 @@ public:
 
 	bool isInPath(int);
 	void addToPath(int);
+	double generateHeuristics();
 	void updateDistance();
 
 	// return the index of the node of the smallest travel distance
@@ -33,6 +35,7 @@ public:
 
 	int getCurrentNode();
 	double getInitialDistance();
+	int getExpandedNodes();
 	std::vector<double> getAdjustedDistance();
 	std::vector<int> getPath();
 	std::vector<Node> getNodes();
