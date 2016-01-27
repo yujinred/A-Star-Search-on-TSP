@@ -23,6 +23,7 @@ Tree::Tree(string fileLocation) {
 	level = 0;
 	currentNode = 0;
 	initialDistance = 0;
+	loopBack = false;
 	generateTree(fileLocation);
 	path.push_back(0);
 	updateDistance();
@@ -38,6 +39,11 @@ Tree::Tree(int level, int currentNode, double initialDistance, vector<int> path,
 	this->listOfNodes = listOfNodes;
 
 	size = listOfNodes.size();
+
+	loopBack = false;;
+	if (this->path.size() == size) {
+		loopBack = true;
+	}
 	
 	updateDistance();
 }
@@ -72,12 +78,12 @@ vector<Node> Tree::getNodes() { return listOfNodes; }
 void Tree::updateDistance() {
 
 	for (int i = 0; i < size; ++i) {
-		if (isInPath(i)) {
-			adjustedDistance.push_back(0);
-		} else {
+		if (!isInPath(i) || (loopBack && i == 0)) {
 			// our cost so far plus the extra distance to get to the new node
 			double newDistance = initialDistance + listOfNodes[currentNode].distanceToNode(listOfNodes[i]);
-			adjustedDistance.push_back(newDistance);
+			adjustedDistance.push_back(newDistance);		
+		} else {
+			adjustedDistance.push_back(0);
 		}
 	}
 }
@@ -98,7 +104,6 @@ int Tree::findSmallestDistance() {
 
 void Tree::printTree() {
 	for (int i = 0; i < size; ++i) {
-		// cout << listOfNodes[i].getX() << " " << listOfNodes[i].getY() << endl;
-		// cout << adjustedDistance[i] << endl;
+		cout << listOfNodes[i].getX() << " " << listOfNodes[i].getY() << endl;
 	}
 }

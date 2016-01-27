@@ -29,10 +29,8 @@ int AStarSearch::getNodeExpanded() {
 }
 
 void AStarSearch::runSearch() {
-	listOfTrees[0].printTree();
-
-	bool loopBackToRoot = false;
-	while (true) {
+	int pathSize = 0;
+	while (pathSize < 4) {
 		nodeExpanded++;
 		int nodeToExpand;
 		int prevLevel;
@@ -56,106 +54,22 @@ void AStarSearch::runSearch() {
 		listOfTrees[prevLevel].removeDistance(nodeToExpand);
 
 		vector<int> lastPath = listOfTrees[prevLevel].getPath();
-		for (int i = 0; i < lastPath.size(); ++i) {
-			cout << originalTree[lastPath[i]].getName() << " ";
-		}
-		cout << originalTree[nodeToExpand].getName() << endl;
-		// all nodes visited, we need to go back
-		if (lastPath.size() + 1 == 4) {
-			break;
-		} else if (lastPath.size() == 4) {
-			// the loop is complete
-			break;
-		}
+		pathSize = lastPath.size();
 		
 		Tree temp(nodeExpanded, nodeToExpand, distanceToNextNode, lastPath, originalTree);
-		cout << "TREE #" << nodeExpanded << endl;
-		temp.printTree();
 		listOfTrees.push_back(temp);
 	}
+	vector<int> finalPath = listOfTrees[nodeExpanded].getPath();
+	// print out the data points in the order where the optimal solution travelled
+	pathSize = finalPath.size();
+	for (int i = 0; i < pathSize; ++i) {
+		originalTree[finalPath[i]].printNode();
+	}
 }
-
-// void AStarSearch::runSearch() {
-// 	vector< vector<double> > adjustedDistance;
-// 	vector< vector<int> > pathSoFar;
-// 	int size = tree.size();
-
-// 	int currentLevel = -1;
-// 	int finalNodeToGoTo = 0;
-
-// 	int nodeExpanded = 0;
-	
-// 	vector<double> totalDistanceTravelled;
-// 	totalDistanceTravelled.push_back(0);
-//  	while (true) {
- 		
-//  		bool unlockFirstNode = false;
-// 		vector<int> psf; 
-// 		if (currentLevel != -1) {
-// 			psf = pathSoFar[currentLevel];
-// 		} else {
-// 			currentLevel = 0;
-// 		}
-// 		psf.push_back(finalNodeToGoTo);
-
-// 		if (psf.size() == size) {
-// 			unlockFirstNode = true;
-// 		}
-// 		// finish when we visited every node plus itself again
-// 		if (psf.size() == size + 1) {
-// 			break;
-// 		}
-
-// 		for (int i = 0; i < psf.size(); ++i) {
-// 			cout << tree[psf[i]].getName() << " ";
-// 		}
-// 		cout << totalDistanceTravelled[pathSoFar.size()];
-// 		cout << endl;
-// 		pathSoFar.push_back(psf);
-
-// 		currentLevel = pathSoFar.size() - 1;
-
-// 		vector<double> dist;
-// 		// distance to get to every node plus itself after
-// 		for (int i = 0; i < size + 1; ++i) {
-// 			if (i == size) {
-// 				if (unlockFirstNode) {
-// 					double g_i = totalDistanceTravelled[currentLevel] + tree[finalNodeToGoTo].distanceToNode(tree[0]);
-// 					dist.push_back(g_i);
-// 				} else {
-// 					dist.push_back(0);
-// 				}
-// 				break;
-// 			}
-// 			bool seenNode = false;
-// 			for (int j = 0; j < pathSoFar[currentLevel].size(); ++j) {
-// 				if (i == pathSoFar[currentLevel][j]) {
-// 					seenNode = true;
-// 				}
-// 			}
-// 			if (seenNode) {
-// 				dist.push_back(0);
-// 			} else {
-// 				double g_i = totalDistanceTravelled[currentLevel] + tree[finalNodeToGoTo].distanceToNode(tree[i]);
-// 				double h_i = generateHeuristics(i);
-// 				dist.push_back(g_i + h_i);
-// 			}
-// 		}
-// 		adjustedDistance.push_back(dist);
-
-// 		double overallMinDistance = -1;
-// 		finalNodeToGoTo = findCheapestRoute(adjustedDistance, currentLevel, overallMinDistance);
-// 		totalDistanceTravelled.push_back(overallMinDistance);
-// 		// remove expanded node
-// 		adjustedDistance[currentLevel][finalNodeToGoTo] = 0;
-// 		nodeExpanded++;
-// 	}
-
-// 	return nodeExpanded;
-// }
 
 int main() {
 	AStarSearch searchObj("./randTSP/4/instance_1.txt");
 	searchObj.runSearch();
+	cout << searchObj.getNodeExpanded() << endl;
 	return 0;
 }

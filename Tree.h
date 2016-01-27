@@ -8,6 +8,7 @@ class Tree {
 	int size;
 	int level;
 	int currentNode;
+	bool loopBack;
 	double initialDistance;
 	std::vector<double> adjustedDistance;
 	std::vector<int> path;
