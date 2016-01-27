@@ -1,22 +1,6 @@
-#include "Node.h"
-#include "Tree.h"
-#include <iostream>
-#include <fstream>
-#include <string>
+#include "Search.h"
 #include <float.h>
 using namespace std;
-
-class AStarSearch {
-	int topMostLevel;
-	int nodesExpanded;
-	vector<Tree> listOfTrees;
-	vector<Node> originalTree;
-
-public:
-	AStarSearch(string);
-	void runSearch();
-	int getNodesExpanded();
-};
 
 AStarSearch::AStarSearch(string filename) {
 	topMostLevel = 0;
@@ -68,30 +52,5 @@ void AStarSearch::runSearch() {
 		listOfTrees.push_back(temp);
 	}
 	vector<int> finalPath = listOfTrees[topMostLevel].getPath();
-	// print out the data points in the order where the optimal solution travelled
 	pathSize = finalPath.size();
-}
-
-int main() {
-	int TSPSize;
-	int TSPInstance;
-	while(true) {
-		cout << "Enter the number of nodes you want for your TSP: ";
-		cin >> TSPSize;
-		if (TSPSize <= 0) {
-			cout << "Invalid TSP size; program will now terminate" << endl;
-			break;
-		}
-		cout << "Which instance of TSP do you want: ";
-		cin >> TSPInstance;
-		if (TSPInstance < 1 || TSPInstance > 10) {
-			cout << "Invalid TSP instance, please enter a number from 1 to 10" << endl;
-			break;
-		}
-		string fileLocation = "./randTSP/" + to_string(TSPSize) + "/instance_" + to_string(TSPInstance) +".txt";
-		AStarSearch searchObj(fileLocation);
-		searchObj.runSearch();
-		cout << searchObj.getNodesExpanded() << endl;
-	}
-	return 0;
 }

@@ -2,3 +2,5 @@
 *.d
 *Test.*
 a.out
+ui
+data
