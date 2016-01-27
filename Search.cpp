@@ -1,5 +1,6 @@
 #include "Search.h"
 #include <float.h>
+#include <iostream>
 using namespace std;
 
 AStarSearch::AStarSearch(string filename) {
@@ -13,6 +14,18 @@ AStarSearch::AStarSearch(string filename) {
 
 int AStarSearch::getNodesExpanded() {
 	return nodesExpanded;
+}
+
+void AStarSearch::printResult() {
+	vector<int> path = listOfTrees[topMostLevel].getPath();
+	for (int i = 0; i < path.size(); ++i) {
+		cout << originalTree[path[i]].getName();
+		if (i == path.size()-1) {
+			cout << endl;
+		} else {
+			cout << " ";
+		}
+	}
 }
 
 void AStarSearch::runSearch() {

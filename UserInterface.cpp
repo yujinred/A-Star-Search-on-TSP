@@ -26,6 +26,8 @@ int main() {
 		searchObj.runSearch();
 		cout << "Number of Nodes expanded: " << endl;
 		cout << searchObj.getNodesExpanded() << endl;
+		cout << "What does the final tree like: " << endl;
+		searchObj.printResult();
 	}
 	return 0;
 }

@@ -14,6 +14,7 @@ class AStarSearch {
 public:
 	AStarSearch(std::string);
 	void runSearch();
+	void printResult();
 	int getNodesExpanded();
 };
 

@@ -7,7 +7,7 @@ using namespace std;
 
 int main() {
 	// maximum size of TSP problem to run
-	int TSPSize = 8;
+	int TSPSize = 10;
 	// total number of instances to run
 	int TSPInstance = 10;
 	// go through each TSP with i number of nodes
