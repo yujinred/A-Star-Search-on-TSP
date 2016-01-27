@@ -19,6 +19,8 @@ There are two modes for this program.
 This mode allow you to specify which input you want to give to the algorithm.
 You can choose from a list within randTSP folder.
 
+This returns the number of nodes expanded and the solution to the specified problem.
+
 Run these two commands from your shell.
 ```
 * make ui
@@ -28,6 +30,9 @@ Run these two commands from your shell.
 ### The Data Generator Mode
 
 This mode generates a list of number of nodes and the average node expanded for those many nodes.
+
+The returns 2 columns of data in the form of
+'Number of Nodes' 'Number of Nodes Expanded in the Search'
 
 Run these two commands from your shell.
 ```
