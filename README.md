@@ -31,7 +31,7 @@ Run these two commands from your shell.
 
 This mode generates a list of number of nodes and the average node expanded for those many nodes.
 
-The returns 2 columns of data in the form of
+This returns 2 columns of data in the form of
 'Number of Nodes' 'Number of Nodes Expanded in the Search'
 
 Run these two commands from your shell.
