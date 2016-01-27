@@ -9,7 +9,8 @@ First off with the github basics:
 * pull
 ```
 
-There is two modes for this program.
+There are two modes for this program.
+
 1. User Interface Mode
 2. Data Generator Mode
 
