@@ -11,10 +11,13 @@ class HeuristicsGenerator {
 	std::vector<double> listOfDistance;
 	std::vector<int> startPos;
 	std::vector<int> endPos;
+	std::vector< std::vector<int> > set;
 
 	void generateDistances();
 	void sortList();
 	void minimumSpammingTree();
+	bool findSet(int, int);
+	void joinSet(int, int);
 public:
 	HeuristicsGenerator(std::vector<Node>);
 	double getHeuristics();

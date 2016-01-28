@@ -78,10 +78,11 @@ vector<Node> Tree::getNodes() { return listOfNodes; }
 int Tree::getExpandedNodes() { return expandedNodes; }
 
 
-double Tree::generateHeuristics() {
+double Tree::generateHeuristics(int index) {
 	vector<Node> truncatedNodeList;
 	for (int i = 0; i < listOfNodes.size(); ++i) {
-		if (!isInPath(i)) {
+		if (isInPath(i) || i == index) {			
+		} else {
 			truncatedNodeList.push_back(listOfNodes[i]);
 		}
 	}
@@ -96,11 +97,12 @@ void Tree::updateDistance() {
 			// our cost so far plus the extra distance to get to the new node
 			expandedNodes++;
 			double newDistance = initialDistance + listOfNodes[currentNode].distanceToNode(listOfNodes[i]);
-			double heuristics = generateHeuristics();
+			double heuristics = generateHeuristics(i);
 			adjustedDistance.push_back(newDistance + heuristics);		
 		} else {
 			adjustedDistance.push_back(0);
 		}
+
 	}
 }
 

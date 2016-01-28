@@ -15,6 +15,7 @@ void HeuristicsGenerator::generateDistances() {
 
 HeuristicsGenerator::HeuristicsGenerator(vector<Node> allNodes) {
 	listOfNodes = allNodes;
+	heuristics = 0;
 	generateDistances();
 	sortList();
 	minimumSpammingTree();
@@ -41,46 +42,66 @@ void HeuristicsGenerator::sortList() {
 
 double HeuristicsGenerator::getHeuristics() { return heuristics; }
 
-void HeuristicsGenerator::minimumSpammingTree() {
-	// choose the cheapest distance
-	// if the coordinate of both distances have been chosen already
-	// don't choose that
-	int nodesNeeded = listOfNodes.size() - 1;
-	if (nodesNeeded <= 0) {
-		heuristics = 0;
+bool HeuristicsGenerator::findSet(int index, int index2) {
+	int set1 = -1;
+	int set2 = -1;
+	for (int i = 0; i < set.size(); ++i) {
+		for (int j = 0; j < set[i].size(); ++j) {
+			if (index == set[i][j]) {
+				set1 = i;
+			}
+			if (index2 == set[i][j]) {
+				set2 = i;
+			}
+		}
+	}
+
+	if ((set1 == -1)|| (set2 == -1)) {
+		return false;
+	}
+
+	return set1 == set2;
+}
+
+void HeuristicsGenerator::joinSet(int index, int index2) {
+	int set1 = -1;
+	int set2 = -1;
+	for (int i = 0; i < set.size(); ++i) {
+		for (int j = 0; j < set[i].size(); ++j) {
+			if (index == set[i][j]) {
+				set1 = i;
+			}
+			if (index2 == set[i][j]) {
+				set2 = i;
+			}
+		}
+	}
+	if (set1 == -1 && set2 == -1) {
+		vector<int> temp;
+		temp.push_back(index);
+		temp.push_back(index2);
+		set.push_back(temp);
+		return;
+	} else if (set1 == -1) {
+		set[set2].push_back(index);
+		return;
+	} else if (set2 == -1) {
+		set[set1].push_back(index2);
 		return;
 	}
-	vector<int> nodesConsumed;
+
+	for (int i = 0; i < set[set2].size(); ++i) {
+		set[set1].push_back(set[set2][i]);
+		set.erase(set.begin()+set2);
+	}
+}
+
+
+void HeuristicsGenerator::minimumSpammingTree() {
 	for (int i = 0; i < listOfDistance.size(); ++i) {
-		if (nodesNeeded == 0) {
-			break;
-		}
-		bool sameStart = false;
-		for (int j = 0; j < nodesConsumed.size(); ++j) {
-			if (nodesConsumed[j] == startPos[i]) {
-				sameStart = true;
-				break;
-			}
-		}	
-		if (!sameStart) {
-			nodesConsumed.push_back(startPos[i]);
-			nodesConsumed.push_back(endPos[i]);
+		if (!findSet(startPos[i],endPos[i])) {
 			heuristics += listOfDistance[i];
-			nodesNeeded--;
-		} else {
-			bool sameEnd = false;
-			for (int j = 0; j < nodesConsumed.size(); ++j) {
-				if (nodesConsumed[j] == endPos[i]) {
-					sameEnd = true;
-					break;
-				}
-			}
-			if (!sameEnd) {
-				nodesConsumed.push_back(startPos[i]);
-				nodesConsumed.push_back(endPos[i]);
-				heuristics += listOfDistance[i];
-				nodesNeeded--;
-			}
+			joinSet(startPos[i], endPos[i]);
 		}
 	}
 }

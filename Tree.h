@@ -23,7 +23,7 @@ public:
 
 	bool isInPath(int);
 	void addToPath(int);
-	double generateHeuristics();
+	double generateHeuristics(int);
 	void updateDistance();
 
 	// return the index of the node of the smallest travel distance
